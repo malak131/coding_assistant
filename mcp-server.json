@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "product-images": {
+    "product-image-service": {
       "command": "python",
-      "args": ["mcp-product-images.py"],
+      "args": ["mcp-server.py"],
       "env": {}
     }
   }

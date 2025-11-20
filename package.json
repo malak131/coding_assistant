@@ -1,0 +1,14 @@
+{
+  "name": "techstore-ecommerce",
+  "version": "1.0.0",
+  "description": "Modern E-Commerce Website with MCP Integration",
+  "main": "index.html",
+  "scripts": {
+    "mcp-server": "python mcp-server.py"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": ["ecommerce", "mcp", "javascript"],
+  "author": "",
+  "license": "MIT"
+}
