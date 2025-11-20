@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - TechStore</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <a href="index.html" class="logo">TechStore</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="nav-btn" id="loginBtn">Login</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Checkout -->
+    <main class="checkout">
+        <div class="container">
+            <h1>Checkout</h1>
+            
+            <div class="checkout-layout">
+                <!-- Checkout Form -->
+                <div class="checkout-form">
+                    <form id="checkoutForm">
+                        <!-- Shipping Information -->
+                        <section class="form-section">
+                            <h2>Shipping Information</h2>
+                            <div class="form-row">
+                                <input type="text" id="firstName" placeholder="First Name" required>
+                                <input type="text" id="lastName" placeholder="Last Name" required>
+                            </div>
+                            <input type="email" id="emailAddress" placeholder="Email Address" required>
+                            <input type="tel" id="phone" placeholder="Phone Number" required>
+                            <input type="text" id="address" placeholder="Street Address" required>
+                            <div class="form-row">
+                                <input type="text" id="city" placeholder="City" required>
+                                <input type="text" id="state" placeholder="State" required>
+                                <input type="text" id="zipCode" placeholder="ZIP Code" required>
+                            </div>
+                        </section>
+
+                        <!-- Payment Information -->
+                        <section class="form-section">
+                            <h2>Payment Information</h2>
+                            <div class="payment-methods">
+                                <label class="payment-method">
+                                    <input type="radio" name="paymentMethod" value="card" checked>
+                                    Credit/Debit Card
+                                </label>
+                                <label class="payment-method">
+                                    <input type="radio" name="paymentMethod" value="paypal">
+                                    PayPal
+                                </label>
+                            </div>
+                            
+                            <div id="cardDetails">
+                                <input type="text" id="cardNumber" placeholder="Card Number" maxlength="19">
+                                <div class="form-row">
+                                    <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5">
+                                    <input type="text" id="cvv" placeholder="CVV" maxlength="4">
+                                </div>
+                                <input type="text" id="cardName" placeholder="Name on Card">
+                            </div>
+                        </section>
+
+                        <button type="submit" class="place-order-btn">Place Order</button>
+                    </form>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h2>Order Summary</h2>
+                    <div id="orderItems"></div>
+                    
+                    <div class="order-totals">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Shipping:</span>
+                            <span id="shipping">$9.99</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Tax:</span>
+                            <span id="tax">$0.00</span>
+                        </div>
+                        <div class="total-row final-total">
+                            <span>Total:</span>
+                            <span id="finalTotal">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Order Confirmation Modal -->
+    <div id="orderConfirmationModal" class="modal">
+        <div class="modal-content">
+            <h2>Order Confirmed! 🎉</h2>
+            <p>Thank you for your purchase!</p>
+            <p>Order ID: <strong id="orderId"></strong></p>
+            <p>You will receive a confirmation email shortly.</p>
+            <button onclick="window.location.href='index.html'">Continue Shopping</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="js/mcp-image-tool.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/checkout.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/theme.js"></script>
+</body>
+</html>
