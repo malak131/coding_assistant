@@ -1,38 +1,74 @@
 /**
  * MCP Client Implementation
- * Built according to official MCP specification
+ * Built according to official MCP specification - HTTPS version
  */
 
 class MCPClient {
-    constructor(serverConfig) {
-        this.serverConfig = serverConfig;
+    constructor(serverUrl = 'http://localhost:5000') {
+        this.serverUrl = serverUrl;
         this.connected = false;
         this.cache = new Map();
     }
 
     async connect() {
-        // In browser environment, we simulate MCP connection
-        this.connected = true;
-        console.log('MCP Client connected');
+        try {
+            const response = await fetch(`${this.serverUrl}/tools`);
+            if (response.ok) {
+                this.connected = true;
+                console.log('MCP Client connected to', this.serverUrl);
+                return true;
+            }
+        } catch (error) {
+            console.warn('MCP Server not available, using fallback');
+            this.connected = false;
+        }
+        return false;
     }
 
     async callTool(toolName, args) {
-        if (!this.connected) {
-            await this.connect();
-        }
-
         // Check cache
         const cacheKey = `${toolName}:${JSON.stringify(args)}`;
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey);
         }
 
-        // Simulate tool call (in real implementation, this would communicate with MCP server)
-        const result = await this._executeToolLocally(toolName, args);
+        let result;
+        
+        // Try HTTPS server first
+        if (!this.connected) {
+            await this.connect();
+        }
+
+        if (this.connected) {
+            try {
+                result = await this._callRemoteTool(toolName, args);
+            } catch (error) {
+                console.warn('Remote call failed, using fallback:', error);
+                result = await this._executeToolLocally(toolName, args);
+            }
+        } else {
+            result = await this._executeToolLocally(toolName, args);
+        }
         
         // Cache result
         this.cache.set(cacheKey, result);
         return result;
+    }
+
+    async _callRemoteTool(toolName, args) {
+        const response = await fetch(`${this.serverUrl}/tools/${toolName}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(args)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        return await response.json();
     }
 
     async _executeToolLocally(toolName, args) {
@@ -98,10 +134,11 @@ class MCPClient {
     }
 }
 
-// Initialize global MCP client
-window.mcpClient = new MCPClient({
-    serverName: 'product-image-service'
-});
+// Initialize global MCP client with HTTPS server URL
+window.mcpClient = new MCPClient('http://localhost:5000');
+
+// Auto-connect on page load
+window.mcpClient.connect();
 
 // Backward compatibility wrapper
 window.mcpImageTool = {

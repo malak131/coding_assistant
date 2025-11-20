@@ -6,14 +6,16 @@ This project implements the Model Context Protocol (MCP) according to the offici
 ## Architecture
 
 ### MCP Server (`mcp-server.py`)
-- Built using official MCP Python SDK
-- Implements stdio-based server communication
+- Built using Flask for HTTPS communication
+- RESTful API endpoints for MCP tools
 - Provides `get_product_images` tool for e-commerce product images
-- Follows MCP specification for tool listing and execution
+- CORS enabled for browser access
+- Runs on http://localhost:5000
 
 ### MCP Client (`mcp-client.js`)
-- Browser-based MCP client implementation
-- Provides backward compatibility with existing code
+- Browser-based MCP client using HTTPS
+- Connects to MCP server via REST API
+- Automatic fallback to local execution if server unavailable
 - Implements caching for performance optimization
 - Follows MCP client specification
 
@@ -43,16 +45,21 @@ The MCP server is configured in `mcp-server.json`:
 
 ### Starting MCP Server
 ```bash
+# Install dependencies first
+pip install -r requirements.txt
+
+# Start HTTPS server
 python mcp-server.py
+
+# Server will run on http://localhost:5000
 ```
 
 ### Using MCP Client in Browser
 ```javascript
-// Initialize client
-const client = window.mcpClient;
+// Client auto-connects on page load to http://localhost:5000
 
-// Call tool
-const result = await client.callTool('get_product_images', {
+// Call tool (will use HTTPS server if available, fallback to local)
+const result = await window.mcpClient.callTool('get_product_images', {
     product_name: 'iPhone 15 Pro',
     count: 3
 });
@@ -113,20 +120,28 @@ window.mcpClient.callTool('get_product_images', { product_name, count })
 
 ## Official MCP Specification
 This implementation follows the official Model Context Protocol specification:
-- Server: stdio-based communication
-- Tool listing via `list_tools()`
-- Tool execution via `call_tool()`
+- Server: HTTPS/REST API communication
+- Tool listing via GET `/tools`
+- Tool execution via POST `/tools/{tool_name}`
 - Proper input/output schemas
+- CORS support for browser clients
 - Error handling and validation
+- Automatic fallback to local execution
 
 ## Development
 
 ### Testing MCP Server
 ```bash
-# Test tool listing
+# Start server
 python mcp-server.py
 
-# Test tool execution (via MCP client)
+# Test tool listing
+curl http://localhost:5000/tools
+
+# Test tool execution
+curl -X POST http://localhost:5000/tools/get_product_images \
+  -H "Content-Type: application/json" \
+  -d '{"product_name": "iPhone 15", "count": 3}'
 ```
 
 ### Adding New Tools

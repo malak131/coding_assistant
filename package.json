@@ -4,7 +4,8 @@
   "description": "Modern E-Commerce Website with MCP Integration",
   "main": "index.html",
   "scripts": {
-    "mcp-server": "python mcp-server.py"
+    "mcp-server": "python mcp-server.py",
+    "start": "python mcp-server.py"
   },
   "dependencies": {},
   "devDependencies": {},

@@ -1,9 +1,9 @@
 {
   "mcpServers": {
     "product-image-service": {
-      "command": "python",
-      "args": ["mcp-server.py"],
-      "env": {}
+      "type": "https",
+      "url": "http://localhost:5000",
+      "description": "Product image service via HTTPS"
     }
   }
 }
